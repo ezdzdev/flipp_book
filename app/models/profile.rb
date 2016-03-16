@@ -1,5 +1,13 @@
 class Profile < ActiveRecord::Base
 
+  has_many :tags,
+    :through => Profile::Tag
+
+  has_many :profile_tags,
+           :class_name => "::Profile::Tag",
+           :conditions => {:deleted => false}
+  has_many :tags, :through => :profile_tags
+
 end
 
 
