@@ -2,6 +2,13 @@ class Profile < ActiveRecord::Base
   has_and_belongs_to_many :tags,
                           :conditions => { :deleted => false }
 
+  class << self
+    def search(term)
+      # TODO Either make this faster or make this a scope.
+      Profile.order('name desc').where('profiles.name LIKE ?', "%#{term}%")
+    end
+  end
+
   def all_tags=(names)
     self.tags = names.split(",").map do |name|
         Tag.where(name: name.strip).first_or_create!
