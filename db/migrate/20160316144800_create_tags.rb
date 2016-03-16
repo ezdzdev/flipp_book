@@ -2,7 +2,7 @@ class CreateTags < ActiveRecord::Migration
   def self.up
     create_table :tags do |t|
       t.string :name,
-               :limit => 1200,
+               :limit => 256,
                :null => false
       t.boolean :deleted, :null => false, :default => false
       t.string :description,

@@ -2,10 +2,14 @@ class CreateProfiles < ActiveRecord::Migration
   def self.up
     create_table :profiles do |t|
       t.string :name,
-               :limit => 1200
+               :limit => 256
       t.boolean :deleted, :null => false, :default => false
       t.string   :image_url,
                  :limit => 1023
+      t.string :email,
+               :limit => 254
+      t.string :phone_number,
+               :limit => 20
 
       t.timestamps
     end

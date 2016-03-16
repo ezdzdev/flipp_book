@@ -13,9 +13,38 @@
 
 ActiveRecord::Schema.define(version: 20160316184534) do
 
+  create_table "profile_tags", force: :cascade do |t|
+    t.integer "profile_id", limit: 4, null: false
+    t.integer "tag_id",     limit: 4, null: false
+  end
+
+  add_index "profile_tags", ["profile_id", "tag_id"], name: "index_profile_tags_on_profile_id_and_tag_id", using: :btree
+
+  create_table "profiles", force: :cascade do |t|
+    t.string   "name",         limit: 256
+    t.boolean  "deleted",      limit: 1,    default: false, null: false
+    t.string   "image_url",    limit: 1023
+    t.string   "email",        limit: 254
+    t.string   "phone_number", limit: 20
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "profiles", ["name"], name: "index_profiles_on_name", using: :btree
+
   create_table "synonyms", force: :cascade do |t|
     t.integer "tags_id", limit: 4
     t.string  "name",    limit: 255, null: false
   end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",        limit: 256,                  null: false
+    t.boolean  "deleted",     limit: 1,    default: false, null: false
+    t.string   "description", limit: 1200
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
 end
