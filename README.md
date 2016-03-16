@@ -1,9 +1,12 @@
-README === FLIPPBOOK
+README FLIPPBOOK
 
-===
+
 INSTALLATION
+===
 
 # We use ruby 2.2.0, and gemset named flipp_book
+# If you don't have ruby2.2.0
+rvm install ruby-2.2.0
 echo ruby-2.2.0@flipp_book > .ruby-version
 rvm gemset create flipp_book
 bundle install
