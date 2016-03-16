@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316184534) do
+ActiveRecord::Schema.define(version: 20160316210010) do
 
   create_table "profiles", force: :cascade do |t|
-    t.string   "first_name",   limit: 256
-    t.string   "last_name",    limit: 256
+    t.string   "name",         limit: 256
     t.string   "image_url",    limit: 1023
     t.string   "email",        limit: 254
     t.string   "phone_number", limit: 20
@@ -24,8 +23,7 @@ ActiveRecord::Schema.define(version: 20160316184534) do
   end
 
   add_index "profiles", ["email"], name: "index_profiles_on_email", using: :btree
-  add_index "profiles", ["first_name"], name: "index_profiles_on_first_name", using: :btree
-  add_index "profiles", ["last_name"], name: "index_profiles_on_last_name", using: :btree
+  add_index "profiles", ["name"], name: "index_profiles_on_name", using: :btree
 
   create_table "profiles_tags", force: :cascade do |t|
     t.integer "profile_id", limit: 4
@@ -34,6 +32,18 @@ ActiveRecord::Schema.define(version: 20160316184534) do
 
   add_index "profiles_tags", ["profile_id"], name: "index_profiles_tags_on_profile_id", using: :btree
   add_index "profiles_tags", ["tag_id"], name: "index_profiles_tags_on_tag_id", using: :btree
+
+  create_table "sessions", force: :cascade do |t|
+    t.string   "session_id", limit: 255,   null: false
+    t.string   "cas_ticket", limit: 255
+    t.text     "data",       limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["cas_ticket"], name: "index_sessions_on_cas_ticket", using: :btree
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "synonyms", force: :cascade do |t|
     t.integer "tag_id", limit: 4

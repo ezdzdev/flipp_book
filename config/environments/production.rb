@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Single Sign on configs
+  config.rack_cas.server_url = 'https://sso.wishabi.com'
 end

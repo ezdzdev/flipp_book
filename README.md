@@ -1,4 +1,4 @@
-README FLIPPBOOK
+# FLIPPBOOK
 
 
 ## INSTALLATION
@@ -7,13 +7,17 @@ README FLIPPBOOK
 ##### If you don't have ruby-2.2.0
 ```
 rvm install ruby-2.2.0
+```
+
+##### Otherwise, use .ruby-version to maintain version + gemset
+```
 echo ruby-2.2.0@flipp_book > .ruby-version
 rvm gemset create flipp_book
 gem install bundler
 bundle install
 ```
 
-##### If you want to use the default db config
+##### If you want to use the default db:config
 ```
 cp config/database.yml.template config/database.yml
 mysqladmin -u <username> create flipp_book_development

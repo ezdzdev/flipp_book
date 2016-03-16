@@ -1,11 +1,7 @@
 class CreateProfiles < ActiveRecord::Migration
   def change
     create_table :profiles do |t|
-      t.string :first_name,
-               :limit => 256,
-               :index => true
-
-      t.string :last_name,
+      t.string :name,
                :limit => 256,
                :index => true
 
