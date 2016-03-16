@@ -1,0 +1,7 @@
+README === FLIPPBOOK
+
+INSTALLATION
+===
+echo ruby-2.2.0@flipp_book > .ruby-version
+rvm gemset create flipp_book
+bundle install
