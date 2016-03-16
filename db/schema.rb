@@ -13,16 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160316184534) do
 
-  create_table "profile_tags", force: :cascade do |t|
-    t.integer "profile_id", limit: 4, null: false
-    t.integer "tag_id",     limit: 4, null: false
-  end
-
-  add_index "profile_tags", ["profile_id", "tag_id"], name: "index_profile_tags_on_profile_id_and_tag_id", using: :btree
-
   create_table "profiles", force: :cascade do |t|
-    t.string   "name",         limit: 256
-    t.boolean  "deleted",      limit: 1,    default: false, null: false
+    t.string   "first_name",   limit: 256
+    t.string   "last_name",    limit: 256
     t.string   "image_url",    limit: 1023
     t.string   "email",        limit: 254
     t.string   "phone_number", limit: 20
@@ -30,16 +23,25 @@ ActiveRecord::Schema.define(version: 20160316184534) do
     t.datetime "updated_at"
   end
 
-  add_index "profiles", ["name"], name: "index_profiles_on_name", using: :btree
+  add_index "profiles", ["email"], name: "index_profiles_on_email", using: :btree
+  add_index "profiles", ["first_name"], name: "index_profiles_on_first_name", using: :btree
+  add_index "profiles", ["last_name"], name: "index_profiles_on_last_name", using: :btree
+
+  create_table "profiles_tags", force: :cascade do |t|
+    t.integer "profile_id", limit: 4
+    t.integer "tag_id",     limit: 4
+  end
+
+  add_index "profiles_tags", ["profile_id"], name: "index_profiles_tags_on_profile_id", using: :btree
+  add_index "profiles_tags", ["tag_id"], name: "index_profiles_tags_on_tag_id", using: :btree
 
   create_table "synonyms", force: :cascade do |t|
-    t.integer "tags_id", limit: 4
-    t.string  "name",    limit: 255, null: false
+    t.integer "tag_id", limit: 4
+    t.string  "name",   limit: 255, null: false
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string   "name",        limit: 256,                  null: false
-    t.boolean  "deleted",     limit: 1,    default: false, null: false
+    t.string   "name",        limit: 256,  null: false
     t.string   "description", limit: 1200
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -1,10 +1,10 @@
 class CreateTags < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :tags do |t|
       t.string :name,
                :limit => 256,
                :null => false
-      t.boolean :deleted, :null => false, :default => false
+
       t.string :description,
                :limit => 1200
 
@@ -12,9 +12,5 @@ class CreateTags < ActiveRecord::Migration
     end
 
     add_index :tags, :name
-  end
-
-  def self.down
-    drop_table :tags
   end
 end

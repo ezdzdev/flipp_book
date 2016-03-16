@@ -1,15 +1,18 @@
 class Profile < ActiveRecord::Base
+  has_and_belongs_to_many :tags,
+                          :conditions => { :deleted => false }
 
-  has_many :tags,
-    :through => Profile::Tag
+  def all_tags=(names)
+    self.tags = names.split(",").map do |name|
+        Tag.where(name: name.strip).first_or_create!
+    end
+  end
 
-  has_many :profile_tags,
-           :class_name => "::Profile::Tag",
-           :conditions => {:deleted => false}
-  has_many :tags, :through => :profile_tags
+  def all_tags
+    self.tags.map(&:name).join(", ")
+  end
 
 end
-
 
 #
 #  string :name,

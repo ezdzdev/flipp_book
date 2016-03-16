@@ -1,23 +1,25 @@
 class CreateProfiles < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :profiles do |t|
-      t.string :name,
-               :limit => 256
-      t.boolean :deleted, :null => false, :default => false
-      t.string   :image_url,
-                 :limit => 1023
+      t.string :first_name,
+               :limit => 256,
+               :index => true
+
+      t.string :last_name,
+               :limit => 256,
+               :index => true
+
+      t.string :image_url,
+               :limit => 1023
+
       t.string :email,
-               :limit => 254
+               :limit => 254,
+               :index => true
+
       t.string :phone_number,
                :limit => 20
 
       t.timestamps
     end
-
-    add_index :profiles, :name
-  end
-
-  def self.down
-    drop_table :profiles
   end
 end
