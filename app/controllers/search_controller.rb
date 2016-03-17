@@ -23,7 +23,7 @@ class SearchController < ApplicationController
     all_profiles =  []
 
     full_query.split.each do |term|
-      term = params[:term].downcase.gsub(/[^a-z0-9]/, '')
+      term = term.downcase.gsub(/[^a-z0-9]/, '')
 
       tag_matches = Tag.search(term)
 
