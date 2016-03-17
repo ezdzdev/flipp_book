@@ -1,5 +1,9 @@
 class SearchController < ApplicationController
 
+  def index
+    render 'profiles/index'
+  end
+
   def search_tags
     term = params[:term].downcase.gsub(/[^a-z0-9]/, '')
 

@@ -1,0 +1,22 @@
+{
+  "name": "flipp_book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezdzdev/flipp_book.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezdzdev/flipp_book/issues"
+  },
+  "homepage": "https://github.com/ezdzdev/flipp_book#readme",
+  "dependencies": {
+    "webpack": "^1.12.14"
+  }
+}
