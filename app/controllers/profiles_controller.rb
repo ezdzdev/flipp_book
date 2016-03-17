@@ -9,7 +9,8 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    render json: Profile.find(params[:id])
+    @profile = Profile.find(params[:id])
+    render :erb => "profiles/index", :layout => false;
   end
 
   def update

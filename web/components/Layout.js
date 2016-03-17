@@ -66,7 +66,7 @@ export default class Layout extends React.Component {
   render() {
     return (
       <div>
-        <SearchBar onChange={this.searchBarChange.bind(this)} endpoint="/search/tags_and_names.json"/>
+        <SearchBar onChange={this.searchBarChange.bind(this)} endpoint="/search/profiles.json"/>
         <div>Results</div>
         {this.state.profiles}
       </div>
