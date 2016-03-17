@@ -13,24 +13,37 @@ class SearchController < ApplicationController
   end
 
   def search_tags_and_names
-    term = params[:term].downcase.gsub(/[^a-z0-9]/, '')
+    full_query = params[:query]
 
-    tag_matches = Tag.search(term)
+    all_tags =  []
+    all_profiles =  []
 
-    profile_matches = Profile.search(term)
+    full_query.split.each do |term|
+      term = params[:term].downcase.gsub(/[^a-z0-9]/, '')
+
+      tag_matches = Tag.search(term)
+
+      tagged_profile_matches = tag_matches.map(&:profiles)
+
+      profile_matches = Profile.search(term)
+
+      all_tags << tag_matches
+      all_profiles << profile_matches
+      all_profiles << tagged_profile_matches
+    end
 
     respond_to do |format|
       format.json {
         render :json => {
-          :tags => tag_matches,
-          :profiles => profile_matches
+          :tags => all_tags,
+          :profiles => all_profiles
         }
       }
     end
   end
 
   def search_tags_and_profiles
-    # TODO
+
   end
 
 end
