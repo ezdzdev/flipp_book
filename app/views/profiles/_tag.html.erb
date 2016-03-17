@@ -1,0 +1,3 @@
+<%= link_to(profiles_path(:query => tag.try(:name))) do %>
+  <span><%= tag.present? ? tag.name : '<Blank>' %></span>
+<% end %>

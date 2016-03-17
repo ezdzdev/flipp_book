@@ -10,7 +10,7 @@ class ProfilesController < ApplicationController
 
   def show
     @profile = Profile.find(params[:id])
-    render :erb => "profiles/index", :layout => false;
+    render :erb => "profiles/index"
   end
 
   def update

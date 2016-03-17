@@ -48,3 +48,12 @@
   width: 80px;
 }
 </style>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    <% if params[:query].present? %>
+      window.initialQuery = "<%= params[:query] %>"
+    <% end %>
+  </script>
+
+<script src="/js/client.min.js"></script>
