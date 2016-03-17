@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :profiles, only: [:index, :show, :update]
 
   get 'search/index' => 'search#index'
+  get 'search/profiles' => 'search#search_profiles'
   get 'search/tags' => 'search#search_tags'
   get 'search/tags_and_names' => 'search#search_tags_and_names'
 
