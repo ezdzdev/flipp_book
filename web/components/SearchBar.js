@@ -6,6 +6,50 @@ export default class SearchBar extends React.Component {
 
   constructor() {
     super();
+    if (this.props.queryType == 'tags') {
+      this.props.endpoint = "/search/tags_and_names.json";
+    } else {
+      this.props.endpoint = "/search/tags.json";
+    }
+  }
+
+  // XXX
+  // Ghetto ajax request copy-pasta
+  httpGet_(theUrl, callback, errorCallback) {
+    var xmlhttp = new XMLHttpRequest();
+
+    try {
+      xmlhttp.onreadystatechange = (function() {
+        if (xmlhttp.readyState!=4)
+          return;
+
+        if (xmlhttp.status==200) {
+          var response = xmlhttp.responseText;
+          callback(response);
+        } else {
+          var msg = "Failed to query from " + theUrl;
+          errorCallback(msg);
+        }
+      }).bind(this);
+
+      xmlhttp.ontimeout = (function() {
+        errorCallback(msg);
+      }).bind(this);
+
+      xmlhttp.open( "GET", theUrl, true );
+      xmlhttp.send();
+    } catch(err) {
+      var msg = this.getTranslation_('api_connection_error');
+      errorCallback(msg);
+    }
+  }
+
+  handleChange {
+    if (!!timeout) {
+      timeout.cancel
+    }
+
+    timeout = setTimeout((function() {
 
     // Init timer variable
     this.timer = null;
