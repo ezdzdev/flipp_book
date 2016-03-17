@@ -1,9 +1,5 @@
 class SearchController < ApplicationController
 
-  def index
-    render 'profiles/index'
-  end
-
   def search_tags
     term = params[:term].downcase.gsub(/[^a-z0-9]/, '')
 
@@ -25,11 +21,11 @@ class SearchController < ApplicationController
     full_query.split.each do |term|
       term = term.downcase.gsub(/[^a-z0-9]/, '')
 
-      tag_matches = Tag.search(term)
+      tag_matches = Tag.search(term).first(6)
 
       tagged_profile_matches = tag_matches.map(&:profiles)
 
-      profile_matches = Profile.search(term)
+      profile_matches = Profile.search(term).first(6)
 
       all_tags << tag_matches
       all_profiles << profile_matches
@@ -40,14 +36,10 @@ class SearchController < ApplicationController
       format.json {
         render :json => {
           :tags => all_tags,
-          :profiles => all_profiles
+          :profiles => all_profiles.flatten
         }
       }
     end
-  end
-
-  def search_tags_and_profiles
-
   end
 
 end

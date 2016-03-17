@@ -6,50 +6,6 @@ export default class SearchBar extends React.Component {
 
   constructor() {
     super();
-    if (this.props.queryType == 'tags') {
-      this.props.endpoint = "/search/tags_and_names.json";
-    } else {
-      this.props.endpoint = "/search/tags.json";
-    }
-  }
-
-  // XXX
-  // Ghetto ajax request copy-pasta
-  httpGet_(theUrl, callback, errorCallback) {
-    var xmlhttp = new XMLHttpRequest();
-
-    try {
-      xmlhttp.onreadystatechange = (function() {
-        if (xmlhttp.readyState!=4)
-          return;
-
-        if (xmlhttp.status==200) {
-          var response = xmlhttp.responseText;
-          callback(response);
-        } else {
-          var msg = "Failed to query from " + theUrl;
-          errorCallback(msg);
-        }
-      }).bind(this);
-
-      xmlhttp.ontimeout = (function() {
-        errorCallback(msg);
-      }).bind(this);
-
-      xmlhttp.open( "GET", theUrl, true );
-      xmlhttp.send();
-    } catch(err) {
-      var msg = this.getTranslation_('api_connection_error');
-      errorCallback(msg);
-    }
-  }
-
-  handleChange {
-    if (!!timeout) {
-      timeout.cancel
-    }
-
-    timeout = setTimeout((function() {
 
     // Init timer variable
     this.timer = null;
@@ -60,6 +16,39 @@ export default class SearchBar extends React.Component {
     }
   }
 
+  // XXX
+  // Ghetto ajax request copy-pasta as a promise
+  httpGet_(theUrl, params) {
+    return new Promise(function(res, rej) {
+      var xmlhttp = new XMLHttpRequest();
+
+      try {
+        xmlhttp.onreadystatechange = (function() {
+          if (xmlhttp.readyState!=4)
+            return;
+
+          if (xmlhttp.status==200) {
+            var response = xmlhttp.responseText;
+            res(JSON.parse(response));
+          } else {
+            var msg = "Failed to query from " + theUrl;
+            rej(msg);
+          }
+        }).bind(this);
+
+        xmlhttp.ontimeout = (function() {
+          rej(msg);
+        }).bind(this);
+
+        xmlhttp.open( "GET", theUrl, true );
+        xmlhttp.send();
+      } catch(err) {
+        var msg = this.getTranslation_('api_connection_error');
+        rej(msg);
+      }
+    })
+  }
+
   handleChange(e) {
     // If timer exists, clear the timeout
     if (this.timer != null) {
@@ -67,14 +56,15 @@ export default class SearchBar extends React.Component {
     }
 
     // Set timer
-    this.timer = setTimeout(this.query.bind(this), 150)
+    this.timer = setTimeout(this.query.bind(this, e.target.value), 150)
   }
 
   // Query to populate suggested results
-  query() {
-    // Query server
-    // Return promise
-    this.props.onChange(this.state.tags);
+  query(text) {
+    var that = this;
+    this.httpGet_(this.props.endpoint + '?query=' + text).then(function(d) {
+      that.props.onChange(d.profiles)
+    })
   }
 
   render() {

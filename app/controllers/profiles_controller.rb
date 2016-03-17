@@ -1,9 +1,15 @@
 class ProfilesController < ApplicationController
   def index
+    respond_to do |format|
+      format.json {
+        render :json => Profile.all
+      }
+      format.html {}
+    end
   end
 
   def show
-    render json: @current_user.to_json
+    render json: Profile.find(params[:id])
   end
 
   def update
