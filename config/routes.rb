@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root 'profile#index'
+  root 'profiles#index'
+
+  resources :profiles, only: [:index, :show, :update]
 
   get 'search/index' => 'search#index'
   get 'search/tags' => 'search#search_tags'
