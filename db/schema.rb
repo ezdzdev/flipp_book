@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20160316210010) do
 
   create_table "profiles", force: :cascade do |t|
     t.string   "name",         limit: 256
+    t.string   "role",         limit: 256
     t.string   "image_url",    limit: 1023
     t.string   "email",        limit: 254
     t.string   "phone_number", limit: 20
@@ -24,6 +25,7 @@ ActiveRecord::Schema.define(version: 20160316210010) do
 
   add_index "profiles", ["email"], name: "index_profiles_on_email", using: :btree
   add_index "profiles", ["name"], name: "index_profiles_on_name", using: :btree
+  add_index "profiles", ["role"], name: "index_profiles_on_role", using: :btree
 
   create_table "profiles_tags", force: :cascade do |t|
     t.integer "profile_id", limit: 4

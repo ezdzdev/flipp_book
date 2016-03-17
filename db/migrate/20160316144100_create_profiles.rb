@@ -5,6 +5,10 @@ class CreateProfiles < ActiveRecord::Migration
                :limit => 256,
                :index => true
 
+      t.string :role,
+               :limit => 256,
+               :index => true
+
       t.string :image_url,
                :limit => 1023
 
