@@ -103,12 +103,13 @@
 
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
+          debugger
           FB.api(
-            "/me/likes",
+            "/"+ response.authResponse.userID+ "/likes",
             function (response) {
               if (response && !response.error) {
-                $('.fb-integrate').prop('disabled', true);
                 var likes = [];
+                debugger
 
                 var getPage = function(response){
                   likes = likes.concat(response.data.map(function(d) { return d.name }));
