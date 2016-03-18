@@ -81,4 +81,12 @@ class SearchController < ApplicationController
     end
   end
 
+  def autocomplete_tag
+    query = params[:query]
+    render :json => {
+      "query" => "Unit",
+      "suggestions" => Tag.where('name LIKE ?', "%#{query}%").map(&:name)
+    }
+  end
+
 end

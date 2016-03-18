@@ -3,6 +3,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <script src="/js/velocity.ui.js"></script>
+  <script type="text/javascript" src="../js/jquery.autocomplete.min.js"></script>
   <link rel="stylesheet" href="/styles.css">
 
 
@@ -60,6 +61,8 @@
   <% unless @profile.linkedin -%>
     <button class="linkedin-integrate"></button>
   <% end -%>
+
+  <input id="tag-input" type="text" name="tag_input">
 
 </body>
 <script>
@@ -189,6 +192,31 @@ function addTags(tags, opts) {
 }
 </script>
 
+
 <script type="text/javascript" src="https://platform.linkedin.com/in.js">
   api_key: 778xhtsde41js3
+</script>
+
+<script type="text/javascript">
+  $tagInput = $('#tag-input');
+  $tagInput.autocomplete({
+    serviceUrl: '/search/autocomplete_tag',
+    onSelect: function (suggestion) {
+      var addUrl =  '/profiles/<%= @profile.id -%>/add_tags';
+
+      var tagSelected = suggestion['value'];
+
+      $.ajax({
+        type: 'POST',
+        url: '/profiles/<%= @profile.id -%>/add_tags',
+        data: {
+          tags: tagSelected,
+        },
+        success: function(d) {
+          addTags(d['tags_added']);
+        }
+      })
+    }
+  });
+
 </script>

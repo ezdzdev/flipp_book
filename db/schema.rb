@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317211200) do
+ActiveRecord::Schema.define(version: 20160318114500) do
 
   create_table "profiles", force: :cascade do |t|
     t.string   "name",         limit: 256
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160317211200) do
     t.datetime "updated_at"
     t.boolean  "facebook",     limit: 1,    default: false, null: false
     t.boolean  "linkedin",     limit: 1,    default: false, null: false
+    t.string   "location",     limit: 254
   end
 
   add_index "profiles", ["email"], name: "index_profiles_on_email", using: :btree

@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   get 'search/profiles' => 'search#search_profiles'
   get 'search/tags' => 'search#search_tags'
   get 'search/tags_and_names' => 'search#search_tags_and_names'
+  get 'search/autocomplete_tag' => 'search#autocomplete_tag'
 end
