@@ -23,7 +23,7 @@
 <body>
   <div class="profile-container">
     <h1 style="padding: 0 50px;"><%= @profile.name %></h1>
-    <h2 style="padding: 0 50px;"><%= @profile.role %></h2>
+    <h2 style="padding: 0 50px;"><%= @profile.role %> - <%= @profile.location -%></h2>
     <div class="left big-box">
       <%= image_tag(@profile.image_url) %>
       <% if @profile.location.present? %>
