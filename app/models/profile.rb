@@ -24,10 +24,28 @@ class Profile < ActiveRecord::Base
 
   def add_tags(names)
     names = names.split(",") if name.is_a? String
-    self.tags << names.map{ |name|
+
+    new_tags = names.map{ |name|
       tag = Tag.where(name: name.strip).first_or_create!
       self.tags.include?(tag) ? nil : tag
     }.compact
+
+    self.tags << new_tags
+
+    new_tags
+  end
+
+  def remove_tags(names)
+    names = names.split(",") if name.is_a? String
+
+    tags_to_remove = names.map{ |name|
+      tag = Tag.where(name: name.strip).first
+      self.tags.include?(tag) ? tag : nil
+    }.compact
+
+    self.tags = self.tags - tags_to_remove
+
+    tags_to_remove
   end
 
 end

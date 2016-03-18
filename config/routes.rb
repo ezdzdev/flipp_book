@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :profiles, only: [:index, :show, :update, :edit]
   post 'profiles/:id/add_tags' => 'profiles#add_tags'
+  post 'profiles/:id/remove_tags' => 'profiles#remove_tags'
 
   get 'search/profiles' => 'search#search_profiles'
   get 'search/tags' => 'search#search_tags'

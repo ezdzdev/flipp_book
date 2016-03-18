@@ -30,17 +30,30 @@ class ProfilesController < ApplicationController
 
   end
 
-  # LENARD TODO
   def add_tags
     @profile = Profile.find(params[:id])
     if @current_user == @profile
       tags = params[:tags]
-      @profile.add_tags(tags) unless tags.blank?
+      new_tags = tags.present? ? @profile.add_tags(tags) : []
 
       @profile.update_attribute(:facebook, true) if params[:facebook]
       @profile.update_attribute(:linkedin, true) if params[:linkedin]
 
-      render json: { message: "success" }
+      render json: { message: "success",
+        tags_added: new_tags.map(&:name)
+      }
+    end
+  end
+
+  def remove_tags
+    @profile = Profile.find(params[:id])
+    if @current_user == @profile
+      tags = params[:tags]
+      tags_removed =  tags.present? ? @profile.remove_tags(tags) : []
+
+      render json: { message: "success",
+        tags_removed: tags_removed.map(&:name)
+      }
     end
   end
 end
