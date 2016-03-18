@@ -31,6 +31,7 @@
     }
 
     .tag {
+      position: relative;
       display: inline-block;
       padding: 10px;
       background: #0a9db5;
@@ -43,6 +44,11 @@
 
     noscript {
       display: none;
+    }
+
+    .tag .close {
+      position: absolute;
+      z-index: 100;
     }
   </style>
 </head>
@@ -62,8 +68,6 @@
       <div>
     </div>
   </div>
-
-
 
   <noscript>
     <%= render 'profiles/tag',
@@ -88,7 +92,6 @@
   $(document).ready(function() {
 
     $.ajaxSetup({ cache: true });
-
 
     // Facebook
     $.getScript('//connect.facebook.net/en_US/sdk.js', function(){

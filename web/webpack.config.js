@@ -6,10 +6,13 @@ var webpack = require('webpack');
 module.exports = {
   context: __dirname,
   devtool: debug ? 'inline-sourcemap' : null,
-  entry: "./client.js",
+  entry: {
+    client: "./client.js",
+    edit: "./edit.js"
+  },
   output: {
     path: __dirname + "/../public/js/",
-    filename: "client.min.js"
+    filename: "[name].min.js"
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
