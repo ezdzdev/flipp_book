@@ -62,7 +62,7 @@
     <button class="linkedin-integrate"></button>
   <% end -%>
 
-  <input id="tag-input" type="text" name="tag_input">
+  <input id="tag-input" type="text" name="tag_input" onkeydown="addTagOnEnter(this)">
 
 </body>
 <script>
@@ -190,6 +190,14 @@ function addTags(tags, opts) {
     });
   });
 }
+
+function addTagOnEnter(ele) {
+  if(event.keyCode == 13) {
+    var tag = addSingleTag('.tag-container', ele.value);
+    tag.velocity('transition.bounceIn', 500)
+  }
+}
+
 </script>
 
 
@@ -213,7 +221,8 @@ function addTags(tags, opts) {
           tags: tagSelected,
         },
         success: function(d) {
-          addTags(d['tags_added']);
+          var tag = addSingleTag('.tag-container', d['tags_added'][0]);
+          tag.velocity('transition.bounceIn', 500)
         }
       })
     }
