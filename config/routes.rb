@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'profiles#index'
 
-  resources :profiles, only: [:index, :show, :update, :add_tags, :edit]
+  resources :profiles, only: [:index, :show, :update, :edit]
   post 'profiles/:id/add_tags' => 'profiles#add_tags'
 
   get 'search/profiles' => 'search#search_profiles'

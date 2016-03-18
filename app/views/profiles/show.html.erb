@@ -2,13 +2,14 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
   <style>
     .profile-container {
-      width: 950px;
+      width: 90%;
       position: relative;
     }
 
     .big-box {
       display: inline-block;
       position: relative;
+      vertical-align: middle;
     }
 
     .left {
@@ -21,6 +22,21 @@
       display: table-cell;
     }
 
+    .tag-container {
+      font-size: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 10px;
+      background: #0a9db5;
+      color: #efefef;
+      vertical-align: middle;
+      text-decoration: none;
+      margin: 5px;
+      font-size: 20px;
+    }
+
     noscript {
       display: none;
     }
@@ -31,7 +47,7 @@
     <h1><%= @profile.name %></h1>
     <h2><%= @profile.role %></h2>
     <div class="left big-box">
-      <%= image_tag(@profile.image_url, class: "menu_icon") %>
+      <%= image_tag(@profile.image_url) %>
     </div>
     <div class="right big-box">
       <div class="tag-container">
@@ -41,6 +57,7 @@
       <div>
     </div>
   </div>
+
 
   <noscript>
     <%= render 'profiles/tag',

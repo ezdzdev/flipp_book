@@ -2,6 +2,9 @@ class Profile < ActiveRecord::Base
   has_and_belongs_to_many :tags,
                           :conditions => { :deleted => false }
 
+  validates :name, :presence => true
+  validates :email, :presence => true, :uniqueness => true
+
   class << self
     def search(term)
       # TODO Either make this faster or make this a scope.
