@@ -19,6 +19,14 @@ class Profile < ActiveRecord::Base
     self.tags.map(&:name).join(", ")
   end
 
+  def add_tags(names)
+    names = names.split(",") if name.is_a? String
+    self.tags << names.map{ |name|
+      tag = Tag.where(name: name.strip).first_or_create!
+      self.tags.include?(tag) ? nil : tag
+    }.compact
+  end
+
 end
 
 #

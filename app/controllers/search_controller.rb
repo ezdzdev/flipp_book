@@ -15,10 +15,22 @@ class SearchController < ApplicationController
   def search_profiles
     full_query = params[:query]
 
+    if full_query.blank?
+      render :json => {
+        :profiles => Profile.all
+      } and return
+    end
+
     all_name_matches = []
     all_tag_matches = []
 
-    full_query.split.each do |term|
+    if full_query.include?(',')
+      terms = full_query.split(',')
+    else
+      terms = full_query.split
+    end
+
+    terms.each do |term|
       term = term.downcase.gsub(/[^a-z0-9]/, '')
 
       name_matches = Profile.search(term)

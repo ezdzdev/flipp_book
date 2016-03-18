@@ -17,4 +17,16 @@ class ProfilesController < ApplicationController
     #TODO update only if current user has permission
     render text: @current_user
   end
+
+  # LENARD TODO
+  def add_tags
+    tags = params[:tags]
+
+    render nothing: true if tags.blank?
+
+    @profile = Profile.find(params[:id])
+    @profile.add_tags(tags)
+
+    render nothing: true
+  end
 end

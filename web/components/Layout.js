@@ -78,10 +78,13 @@ export default class Layout extends React.Component {
 
   // Query to find profiles
   render() {
+    var searchBarStyle = {
+      width: '100%'
+    };
+
     return (
       <div>
-        <SearchBar initialQuery={window.initialQuery} onChange={this.searchBarChange.bind(this)} endpoint="/search/profiles.json"/>
-        <div>Results</div>
+        <SearchBar style={searchBarStyle} className="derp" initialQuery={window.initialQuery} onChange={this.searchBarChange.bind(this)} endpoint="/search/profiles.json"/>
         {this.state.profiles}
       </div>
     );

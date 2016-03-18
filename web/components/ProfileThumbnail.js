@@ -11,9 +11,14 @@ export default class ProfileThumbnail extends React.Component {
 
   render() {
     return (
-      <div class="profile" onClick={this.showProfile.bind(this)}>
-        <img class="profile-thumbnail" src={this.props.profile.image_url}/>
-        <span class="profile-name">{this.props.profile.name}</span>
+      <div class="profile-container">
+        <div class="profile" onClick={this.showProfile.bind(this)}>
+          <img class="profile-thumbnail" src={this.props.profile.image_url}/>
+          <div class="info">
+            <span class="profile-name">{this.props.profile.name}</span>
+            <span class="profile-role">{this.props.profile.role}</span>
+          </div>
+        </div>
       </div>
     );
   }
