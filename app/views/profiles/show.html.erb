@@ -27,7 +27,6 @@
   </style>
 </head>
 <body>
-
   <div class="profile-container">
     <h1><%= @profile.name %></h1>
     <h2><%= @profile.role %></h2>
@@ -48,72 +47,4 @@
       :tag => nil
      %>
   </noscript>
-  <button class="fb-integrate" disabled>
-    Facebook
-  </button>
-  <button class="linkedin-integrate">
-    LinkedIn
-  </button>
 </body>
-<script>
-  $(document).ready(function() {
-
-    $.ajaxSetup({ cache: true });
-
-
-    // Facebook
-    $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
-      FB.init({
-        appId: '1104251826303726',
-        status: true,
-        version: 'v2.5'
-      });
-
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-          FB.api(
-            "/me/likes",
-            function (response) {
-              if (response && !response.error) {
-                $('.fb-integrate').prop('disabled', true);
-                window.likes = [];
-
-                var getPage = function(response){
-                  likes = likes.concat(response.data.map(function(d) { return d.name }));
-                  if (response.paging && response.paging.next) {
-                    $.ajax({
-                      type: 'get',
-                      url: response.paging.next,
-                      success: function(res) {
-                        getPage(res)
-                      }
-                    })
-                  }
-                }
-
-                getPage(response);
-              }
-            }
-          );
-        } else {
-          $('.fb-integrate').prop('disabled', false);
-        }
-      });
-    });
-
-
-
-    $('.fb-integrate').on('click', function() {
-      FB.login(function() {}, {scope: 'user_likes'});
-    })
-    $('.linkedin-integrate').on('click', function() {
-      IN.User.authorize(function(d) {
-        alert("doesn't work");
-      });
-    })
-  });
-</script>
-
-<script type="text/javascript" src="https://platform.linkedin.com/in.js">
-  api_key: 778xhtsde41js3
-</script>

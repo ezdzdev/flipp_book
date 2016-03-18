@@ -1,0 +1,138 @@
+<head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <%= csrf_meta_tag %>
+  <style>
+    .profile-container {
+      width: 950px;
+      position: relative;
+    }
+
+    .big-box {
+      display: inline-block;
+      position: relative;
+    }
+
+    .left {
+      width: 35%;
+      display: table-cell;
+    }
+
+    .right {
+      width: 65%;
+      display: table-cell;
+    }
+
+    noscript {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+    <h1><%= @profile.name %></h1>
+    <h2><%= @profile.role %></h2>
+    <div class="left big-box">
+      <%= image_tag(@profile.image_url, class: "menu_icon") %>
+    </div>
+    <div class="right big-box">
+      <div class="tag-container">
+        <% @profile.tags.each do |t| %>
+          <%= render 'profiles/tag', :tag => t %>
+        <% end %>
+      <div>
+    </div>
+  </div>
+
+  <noscript>
+    <%= render 'profiles/tag',
+      :tag => nil
+     %>
+  </noscript>
+
+  <% unless @profile.facebook -%>
+    <button class="fb-integrate">
+      Facebook
+    </button>
+  <% end -%>
+
+  <% unless @profile.linkedin -%>
+    <button class="linkedin-integrate">
+      LinkedIn
+    </button>
+  <% end -%>
+
+</body>
+<script>
+  $(document).ready(function() {
+
+    $.ajaxSetup({ cache: true });
+
+
+    // Facebook
+    $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
+      FB.init({
+        appId: '1104251826303726',
+        status: true,
+        version: 'v2.5'
+      });
+
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          FB.api(
+            "/me/likes",
+            function (response) {
+              if (response && !response.error) {
+                $('.fb-integrate').prop('disabled', true);
+                var likes = [];
+
+                var getPage = function(response){
+                  likes = likes.concat(response.data.map(function(d) { return d.name }));
+                  if (response.paging && response.paging.next) {
+                    $.ajax({
+                      type: 'get',
+                      url: response.paging.next,
+                      success: function(res) {
+                        getPage(res)
+                      }
+                    })
+                  } else {
+                    $.ajax({
+                      type: 'POST',
+                      url: '/profiles/<%= @profile.id -%>/add_tags',
+                      data: {
+                        tags: likes.join(","),
+                        facebook: true
+                      },
+                      success: function(d) {
+                      }
+                    })
+                  }
+                }
+
+                getPage(response);
+              }
+            }
+          );
+        }
+      });
+    });
+
+
+    $('.fb-integrate').on('click', function() {
+      FB.login(function() {}, {scope: 'user_likes'});
+    })
+
+    $('.linkedin-integrate').on('click', function() {
+      IN.User.authorize(function(d) {
+        IN.API.Raw('/people/~:(skills)?format=json').result(function(d) {
+          debugger;
+        });
+      });
+    })
+  });
+</script>
+
+<script type="text/javascript" src="https://platform.linkedin.com/in.js">
+  api_key: 778xhtsde41js3
+</script>

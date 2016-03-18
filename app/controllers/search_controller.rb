@@ -24,14 +24,10 @@ class SearchController < ApplicationController
     all_name_matches = []
     all_tag_matches = []
 
-    if full_query.include?(',')
-      terms = full_query.split(',')
-    else
-      terms = full_query.split
-    end
+    terms = full_query.split(',')
 
     terms.each do |term|
-      term = term.downcase.gsub(/[^a-z0-9]/, '')
+      term = term.downcase
 
       name_matches = Profile.search(term)
       all_name_matches << name_matches

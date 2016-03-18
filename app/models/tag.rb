@@ -2,8 +2,7 @@ class Tag < ActiveRecord::Base
   has_and_belongs_to_many :profiles,
                           :conditions => { :deleted => false }
 
-  validates :name, :presence => true, :uniqueness => true,
-            :format => {:with => /[a-z0-9]+/}
+  validates :name, :presence => true, :uniqueness => true
 
   class << self
     def search(term)

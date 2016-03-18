@@ -1,14 +1,12 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
 
   before_filter lambda {
     if request.session['cas'] && request.session['cas']['extra_attributes']
       extra_attributes = request.session['cas']['extra_attributes']
       user_info = extra_attributes['user_info']
-
-      @current_user = Profile.where(name: user_info['name']).first
+      @current_user = Profile.where(email: user_info['email']).first
 
       # All new users will have a profile automatically created
       if @current_user.blank?
