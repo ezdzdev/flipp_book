@@ -44,13 +44,27 @@ export default class Layout extends React.Component {
     }
 
     var that = this;
-    this.httpGet_("/profiles.json").then(function(d) {
-      var arr = []
-      for (var i = 0; i < d.length; i++) {
-        arr.push(<ProfileThumbnail key={i} profile={d[i]}/>)
-      }
-      that.setState({profiles: arr})
-    });
+    if (!!window.initialQuery) {
+      this.httpGet_("/search/profiles.json?query=" +
+                    window.initialQuery).then(function(d) {
+        d = d['profiles']
+        var arr = []
+        for (var i = 0; i < d.length; i++) {
+          arr.push(<ProfileThumbnail key={i} profile={d[i]}/>)
+        }
+        that.setState({profiles: arr})
+      });
+    }
+
+    else {
+      this.httpGet_("/profiles.json").then(function(d) {
+        var arr = []
+        for (var i = 0; i < d.length; i++) {
+          arr.push(<ProfileThumbnail key={i} profile={d[i]}/>)
+        }
+        that.setState({profiles: arr})
+      });
+    }
 
   }
 
@@ -64,10 +78,13 @@ export default class Layout extends React.Component {
 
   // Query to find profiles
   render() {
+    var searchBarStyle = {
+      width: '100%'
+    };
+
     return (
       <div>
-        <SearchBar onChange={this.searchBarChange.bind(this)} endpoint="/search/profiles.json"/>
-        <div>Results</div>
+        <SearchBar style={searchBarStyle} className="derp" initialQuery={window.initialQuery} onChange={this.searchBarChange.bind(this)} endpoint="/search/profiles.json"/>
         {this.state.profiles}
       </div>
     );

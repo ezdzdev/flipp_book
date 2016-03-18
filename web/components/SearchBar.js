@@ -70,7 +70,7 @@ export default class SearchBar extends React.Component {
   render() {
     return (
       <div>
-        <input onChange={this.handleChange.bind(this)}/>
+        <input class="search-bar" style={this.props.style} onChange={this.handleChange.bind(this)}/>
       </div>
     );
   }

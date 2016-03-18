@@ -1,14 +1,53 @@
 <head>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <style>
+    .profile-container {
+      width: 950px;
+      position: relative;
+    }
+
+    .big-box {
+      display: inline-block;
+      position: relative;
+    }
+
+    .left {
+      width: 35%;
+      display: table-cell;
+    }
+
+    .right {
+      width: 65%;
+      display: table-cell;
+    }
+
+    noscript {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <div
-    class="fb-like"
-    data-share="true"
-    data-width="450"
-    data-show-faces="true">
+
+  <div class="profile-container">
+    <h1><%= @profile.name %></h1>
+    <h2><%= @profile.role %></h2>
+    <div class="left big-box">
+      <%= image_tag(@profile.image_url, class: "menu_icon") %>
+    </div>
+    <div class="right big-box">
+      <div class="tag-container">
+        <% @profile.tags.each do |t| %>
+          <%= render 'profiles/tag', :tag => t %>
+        <% end %>
+      <div>
+    </div>
   </div>
 
+  <noscript>
+    <%= render 'profiles/tag',
+      :tag => nil
+     %>
+  </noscript>
   <button class="fb-integrate" disabled>
     Facebook
   </button>
