@@ -193,8 +193,18 @@ function addTags(tags, opts) {
 
 function addTagOnEnter(ele) {
   if(event.keyCode == 13) {
-    var tag = addSingleTag('.tag-container', ele.value);
-    tag.velocity('transition.bounceIn', 500)
+    var tagSelected = ele.value;
+    $.ajax({
+      type: 'POST',
+      url: '/profiles/<%= @profile.id -%>/add_tags',
+      data: {
+        tags: tagSelected,
+      },
+      success: function(d) {
+        var tag = addSingleTag('.tag-container', d['tags_added'][0]);
+        tag.velocity('transition.bounceIn', 500)
+      }
+    })
   }
 }
 
