@@ -16,6 +16,8 @@ p_elements.each do |p|
   name = p.css('span').first.content.strip
   role = p.css('span')[1].content.strip
 
+  is_engineer = (role =~ /engineer/i).present? || (role =~ /qa/i).present?
+
   phone_number = p.content.match(/\d\d\d-\d\d\d-\d\d\d\d/).to_s
   email = p.content.match(/[a-z\.]*@flipp\.com/).to_s
 
@@ -25,6 +27,7 @@ p_elements.each do |p|
   profile.role = role
   profile.phone_number = phone_number if phone_number.present?
   profile.email = email if email.present?
+  profile.location = is_engineer ? '14f' : '12f'
 
   profile.save!
 end

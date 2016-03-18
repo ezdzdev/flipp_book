@@ -1,6 +1,8 @@
 <div class="tag"
      onclick="window.location.replace('<%= profiles_path(:query => tag.try(:name)) -%>');">
   <span><%= tag.present? ? tag.name : '<Blank>' %></span>
-  <div class="close"
-       onclick="removeSingleTag(event, this)">x</div>
+  <% if @current_user == @profile %>
+    <div class="close"
+     onclick="removeSingleTag(event, this)">x</div>
+  <% end %>
 </div>
