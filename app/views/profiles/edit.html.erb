@@ -31,8 +31,8 @@
 <body>
 
   <div class="profile-container">
-    <h1><%= @profile.name %></h1>
-    <h2><%= @profile.role %></h2>
+    <h1 style="padding: 0 50px;"><%= @profile.name %></h1>
+    <h2 style="padding: 0 50px;"><%= @profile.role %></h2>
     <div class="left big-box">
       <%= image_tag(@profile.image_url) %>
     </div>
@@ -50,6 +50,8 @@
       :tag => nil
      %>
   </noscript>
+
+  <br/><br/>
 
   <% unless @profile.facebook -%>
     <button class="fb-integrate"></button>
@@ -76,46 +78,51 @@
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
           <% unless @profile.facebook -%>
-            $('.fb-integrate').remove();
-            FB.api(
-              "/"+ response.authResponse.userID+ "/likes",
-              function (response) {
-                if (response && !response.error) {
-                  var likes = [];
-
-                  var getPage = function(response){
-                    likes = likes.concat(response.data.map(function(d) { return d.name }));
-                    if (response.paging && response.paging.next) {
-                      $.ajax({
-                        type: 'get',
-                        url: response.paging.next,
-                        success: function(res) {
-                          getPage(res)
-                        }
-                      })
-                    } else {
-                      addTags(likes, { facebook: true }).then(function(d) {
-                        var tags = [];
-                        for (var i = 0; i < d.tags_added.length; i++) {
-                          tags.push(addSingleTag('.tag-container', d.tags_added[i]));
-                        }
-                        $(tags.map(function(d) { return d[0] }))
-                          .velocity('transition.bounceIn', {stagger: 25, duration: 500})                     });
-                    }
-                  }
-
-                  getPage(response);
-                }
-              }
-            );
+            fb();
           <% end-%>
         }
       });
     });
 
+    function fb() {
+      $('.fb-integrate').remove();
+      FB.api(
+        "/me/likes",
+        function (response) {
+          if (response && !response.error) {
+            var likes = [];
+
+            var getPage = function(response){
+              likes = likes.concat(response.data.map(function(d) { return d.name }));
+              if (response.paging && response.paging.next) {
+                $.ajax({
+                  type: 'get',
+                  url: response.paging.next,
+                  success: function(res) {
+                    getPage(res)
+                  }
+                })
+              } else {
+                addTags(likes, { facebook: true }).then(function(d) {
+                  var tags = [];
+                  for (var i = 0; i < d.tags_added.length; i++) {
+                    tags.push(addSingleTag('.tag-container', d.tags_added[i]));
+                  }
+                  $(tags.map(function(d) { return d[0] }))
+                    .velocity('transition.bounceIn', {stagger: 25, duration: 500})
+                });
+              }
+            }
+
+            getPage(response);
+          }
+        }
+      );
+    }
+
 
     $('.fb-integrate').on('click', function() {
-      FB.login(function() {}, {scope: 'user_likes'});
+      FB.login(function() { fb(); }, {scope: 'user_likes'});
     })
 
     $('.linkedin-integrate').on('click', function() {
@@ -142,7 +149,7 @@ function removeSingleTag(e, tagElement) {
 function addSingleTag(parent, tagText) {
   var tag = $($('noscript').text());
   tag[0].onclick = function() {
-    window.location.pathname = '/profiles?query=' + tagText.replace(/\s/, '+');
+    window.location.replace('/profiles?query=' + tagText.replace(/\s/, '+'));
   }
   tag.find('span').html(tagText);
   $(parent).append(tag);

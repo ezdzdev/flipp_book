@@ -125,7 +125,7 @@ html, body {
 }
 
 button.fb-integrate {
-  background: url(//i.stack.imgur.com/ZW4QC.png) no-repeat;
+  background: url(/fb.png) no-repeat;
   background-size: 180px 41px;
   cursor:pointer;
   border:none;
@@ -134,9 +134,11 @@ button.fb-integrate {
 }
 
 button.linkedin-integrate {
-  background: url(//content.linkedin.com/content/dam/developer/global/en_US/site/img/signin-button.png) no-repeat;
+  background: url(/in.png) no-repeat;
+  background-size: 180px 41px;
+  background-position: 0px 1px;
   cursor:pointer;
   border:none;
-  width:213px;
+  width:180px;
   height:41px;
 }

@@ -1,5 +1,5 @@
 <div class="tag"
-     onclick="window.location.pathname='<%= profiles_path(:query => tag.try(:name)) -%>';">
+     onclick="window.location.replace('<%= profiles_path(:query => tag.try(:name)) -%>');">
   <span><%= tag.present? ? tag.name : '<Blank>' %></span>
   <div class="close"
        onclick="removeSingleTag(event, this)">x</div>
