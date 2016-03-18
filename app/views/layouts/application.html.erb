@@ -5,6 +5,18 @@
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
+  <% if params[:new_user] -%>
+    <div class="flash">
+      Hey, looks like you're new! Edit your profile
+      <a href="/profiles/<%= @current_user.id -%>">here!</a>
+      <div class="close">x</div>
+    </div>
+    <script>
+      document.querySelector('.flash .close').onclick = function() {
+        this.parentElement.remove();
+      }
+    </script>
+  <% end %>
 
   <%= yield %>
 

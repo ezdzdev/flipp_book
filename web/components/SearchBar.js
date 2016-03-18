@@ -9,6 +9,7 @@ export default class SearchBar extends React.Component {
 
     // Init timer variable
     this.timer = null;
+    this.value = window.location.search.replace(/\?query=/,'').replace(/\+/,' ')
 
     this.state = {
       text: "",
@@ -16,7 +17,6 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  // XXX
   // Ghetto ajax request copy-pasta as a promise
   httpGet_(theUrl, params) {
     return new Promise(function(res, rej) {
@@ -50,13 +50,14 @@ export default class SearchBar extends React.Component {
   }
 
   handleChange(e) {
+    this.value = e.target.value;
     // If timer exists, clear the timeout
     if (this.timer != null) {
       clearTimeout(this.timer)
     }
 
     // Set timer
-    this.timer = setTimeout(this.query.bind(this, e.target.value), 150)
+    this.timer = setTimeout(this.query.bind(this, this.value), 150)
   }
 
   // Query to populate suggested results
@@ -70,7 +71,7 @@ export default class SearchBar extends React.Component {
   render() {
     return (
       <div>
-        <input class="search-bar" style={this.props.style} onChange={this.handleChange.bind(this)}/>
+        <input class="search-bar" value={this.initialValue} style={this.props.style} onChange={this.handleChange.bind(this)}/>
       </div>
     );
   }

@@ -57,3 +57,36 @@ html, body {
   font-size: 23px;
   line-height: 26px;
 }
+
+.flash {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  width: 800px;
+  margin: auto;
+  padding: 10px;
+  background: #55BDAB;
+  color: white;
+}
+
+.flash .close {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 10px;
+}
+
+.tag {
+  position: relative;
+  display: inline-block;
+  padding: 5px 10px;
+  background: #0a9db5;
+  color: #efefef;
+  vertical-align: middle;
+  text-decoration: none;
+  margin: 5px;
+  font-size: 15px;
+  border-radius: 3px;
+}
