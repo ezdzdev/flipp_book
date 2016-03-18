@@ -1,3 +1,6 @@
-<%= link_to(profiles_path(:query => tag.try(:name)), :class => "tag") do %>
+<div class="tag"
+     onclick="window.location.pathname='<%= profiles_path(:query => tag.try(:name)) -%>';">
   <span><%= tag.present? ? tag.name : '<Blank>' %></span>
-<% end %>
+  <div class="close"
+       onclick="removeSingleTag(event, this)">x</div>
+</div>

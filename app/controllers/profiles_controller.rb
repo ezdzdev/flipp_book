@@ -36,8 +36,8 @@ class ProfilesController < ApplicationController
       tags = params[:tags]
       new_tags = tags.present? ? @profile.add_tags(tags) : []
 
-      @profile.update_attribute(:facebook, true) if params[:facebook]
-      @profile.update_attribute(:linkedin, true) if params[:linkedin]
+      @profile.update_attribute(:facebook, true) if params[:facebook] == 'true'
+      @profile.update_attribute(:linkedin, true) if params[:linkedin] == 'true'
 
       render json: { message: "success",
         tags_added: new_tags.map(&:name)

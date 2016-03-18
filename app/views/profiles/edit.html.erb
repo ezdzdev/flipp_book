@@ -1,5 +1,8 @@
 <head>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <script src="/js/velocity.ui.js"></script>
   <link rel="stylesheet" href="/styles.css">
 
 
@@ -10,36 +13,9 @@
       position: relative;
     }
 
-    .big-box {
-      display: inline-block;
-      position: relative;
-      vertical-align: middle;
-    }
-
-    .left {
-      width: 35%;
-      display: table-cell;
-    }
-
-    .right {
-      width: 65%;
-      display: table-cell;
-    }
 
     .tag-container {
       font-size: 0;
-    }
-
-    .tag {
-      position: relative;
-      display: inline-block;
-      padding: 10px;
-      background: #0a9db5;
-      color: #efefef;
-      vertical-align: middle;
-      text-decoration: none;
-      margin: 5px;
-      font-size: 20px;
     }
 
     noscript {
@@ -76,15 +52,11 @@
   </noscript>
 
   <% unless @profile.facebook -%>
-    <button class="fb-integrate">
-      Facebook
-    </button>
+    <button class="fb-integrate"></button>
   <% end -%>
 
   <% unless @profile.linkedin -%>
-    <button class="linkedin-integrate">
-      LinkedIn
-    </button>
+    <button class="linkedin-integrate"></button>
   <% end -%>
 
 </body>
@@ -103,42 +75,40 @@
 
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
-          debugger
-          FB.api(
-            "/"+ response.authResponse.userID+ "/likes",
-            function (response) {
-              if (response && !response.error) {
-                var likes = [];
-                debugger
+          <% unless @profile.facebook -%>
+            $('.fb-integrate').remove();
+            FB.api(
+              "/"+ response.authResponse.userID+ "/likes",
+              function (response) {
+                if (response && !response.error) {
+                  var likes = [];
 
-                var getPage = function(response){
-                  likes = likes.concat(response.data.map(function(d) { return d.name }));
-                  if (response.paging && response.paging.next) {
-                    $.ajax({
-                      type: 'get',
-                      url: response.paging.next,
-                      success: function(res) {
-                        getPage(res)
-                      }
-                    })
-                  } else {
-                    $.ajax({
-                      type: 'POST',
-                      url: '/profiles/<%= @profile.id -%>/add_tags',
-                      data: {
-                        tags: likes.join(","),
-                        facebook: true
-                      },
-                      success: function(d) {
-                      }
-                    })
+                  var getPage = function(response){
+                    likes = likes.concat(response.data.map(function(d) { return d.name }));
+                    if (response.paging && response.paging.next) {
+                      $.ajax({
+                        type: 'get',
+                        url: response.paging.next,
+                        success: function(res) {
+                          getPage(res)
+                        }
+                      })
+                    } else {
+                      addTags(likes, { facebook: true }).then(function(d) {
+                        var tags = [];
+                        for (var i = 0; i < d.tags_added.length; i++) {
+                          tags.push(addSingleTag('.tag-container', d.tags_added[i]));
+                        }
+                        $(tags.map(function(d) { return d[0] }))
+                          .velocity('transition.bounceIn', {stagger: 25, duration: 500})                     });
+                    }
                   }
-                }
 
-                getPage(response);
+                  getPage(response);
+                }
               }
-            }
-          );
+            );
+          <% end-%>
         }
       });
     });
@@ -151,11 +121,65 @@
     $('.linkedin-integrate').on('click', function() {
       IN.User.authorize(function(d) {
         IN.API.Raw('/people/~:(skills)?format=json').result(function(d) {
-          debugger;
         });
       });
     })
   });
+
+function removeSingleTag(e, tagElement) {
+  e.stopPropagation();
+
+  var tag = tagElement.parentElement;
+  var tagText = $(tag).find('span').text();
+
+  removeTags([tagText]).then(function(d) {
+    $(tag).velocity('transition.bounceOut', 500, function() {
+      tag.remove();
+    })
+  });
+}
+
+function addSingleTag(parent, tagText) {
+  var tag = $($('noscript').text());
+  tag[0].onclick = function() {
+    window.location.pathname = '/profiles?query=' + tagText.replace(/\s/, '+');
+  }
+  tag.find('span').html(tagText);
+  $(parent).append(tag);
+  return tag;
+}
+
+function removeTags(tags) {
+  return new Promise(function(res, rej) {
+    $.ajax({
+      type: 'POST',
+      url: '/profiles/<%= @profile.id -%>/remove_tags',
+      data: { tags: tags.join(",") },
+      success: function(d) { res(d); },
+      error: function(d) { rej(d); }
+    });
+  })
+}
+
+function addTags(tags, opts) {
+  opts = opts || {} ;
+  opts.facebook = opts.facebook || false;
+  opts.linkedin = opts.linkedin || false;
+
+  return new Promise(function(res ,rej) {
+    $.ajax({
+      type: 'POST',
+      url: '/profiles/<%= @profile.id -%>/add_tags',
+      data: {
+        tags: tags.join(","),
+        facebook: opts.facebook,
+        linkedin: opts.linkedin
+      },
+      success: function(d) { res(d); },
+      error: function(d) { rej(d) }
+    });
+  });
+}
 </script>
 
 <script type="text/javascript" src="https://platform.linkedin.com/in.js">
